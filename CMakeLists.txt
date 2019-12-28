@@ -26,7 +26,14 @@ if(QUADMATH_FOUND)
   set(HAVE_QUADMATH_H 1 CACHE INTERNAL "Have QUADMATH")
 endif()
 
-find_package(BLAS REQUIRED)
+find_library(MKL
+        NAMES mkl_rt
+        PATHS
+        ${CMAKE_SYSTEM_LIBRARY_PATH}
+        /usr/lib/x86_64-linux-gnu
+        /usr/local/lib64
+        /usr/local/lib
+        )
 
 include(CheckFunctionExists)
 set(CMAKE_REQUIRED_INCLUDES math.h)
@@ -105,7 +112,7 @@ set_target_properties(cint PROPERTIES
   VERSION ${cint_VERSION}
   SOVERSION ${cint_SOVERSION}
   LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
-target_link_libraries(cint ${BLAS_LIBRARIES})
+target_link_libraries(cint ${MKL_LIBRARIES})
 if(QUADMATH_FOUND)
   target_link_libraries(cint quadmath)
 endif()
